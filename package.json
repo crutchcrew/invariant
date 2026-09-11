@@ -31,27 +31,28 @@
 		}
 	},
 	"scripts": {
-		"build": "bun build src/index.ts --outdir dist --format esm && tsc --emitDeclarationOnly",
-		"check": "bun run fmt:check && bun run lint && bun run typecheck",
-		"check:lockfile": "bun install --frozen-lockfile",
-		"fmt": "bunx oxfmt -c oxfmt.config.ts --write .",
-		"fmt:check": "bunx oxfmt -c oxfmt.config.ts --check .",
-		"lint": "bunx oxlint -c oxlint.config.ts",
-		"lint:fix": "bunx oxlint -c oxlint.config.ts --fix",
-		"prepare": "bunx lefthook install",
+		"build": "bun run --parallel build:compile build:declaration",
+		"build:compile": "bun build src/index.ts --outdir dist --format esm",
+		"build:declaration": "tsc -p tsconfig.build.json --noEmit false",
+		"check": "bun run --parallel fmt:check lint lockfile:check",
+		"fmt": "oxfmt --write .",
+		"fmt:check": "oxfmt --check .",
+		"lint": "oxlint",
+		"lint:fix": "oxlint --fix",
+		"lockfile:check": "bun install --frozen-lockfile",
+		"prebuild": "rm -rf dist",
+		"prepare": "lefthook install",
 		"prepublishOnly": "bun run build",
-		"sort-package-json": "bunx sort-package-json",
 		"test": "bun test",
-		"test:coverage": "bun test --coverage",
-		"typecheck": "tsc --noEmit"
+		"test:coverage": "bun test --coverage"
 	},
 	"devDependencies": {
+		"@tsconfig/bun": "^1.0.11",
 		"@types/bun": "^1.4.2",
 		"lefthook": "^2.1.12",
 		"oxfmt": "^0.67.0",
 		"oxlint": "^1.82.0",
 		"oxlint-tsgolint": "^7.0.2001",
-		"sort-package-json": "^4.0.0",
 		"typescript": "7"
 	}
 }
