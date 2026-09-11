@@ -21,16 +21,16 @@ invariant(user, "User not found")
 
 ## Why this package
 
-|                                                     | This package | [tiny-invariant](https://github.com/alexreardon/tiny-invariant) | [ts-invariant](https://github.com/apollographql/invariant-packages) | [invariant](https://github.com/zertosh/invariant) |
-| --------------------------------------------------- | ------------ | --------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------- |
-| **Size (gzip)**                                     | ~448 B       | ~370 B                                                          | ~1.0 kB                                                             | ~1.1 kB                                           |
-| **Type narrowing**                                  | ✅           | ✅                                                              | ✅                                                                  | ❌                                                |
-| **Lazy messages**                                   | ✅           | ❌                                                              | ❌                                                                  | ❌                                                |
-| [**Invariant factory**](#createinvarianterrorclass) | ✅           | ❌                                                              | ❌                                                                  | ❌                                                |
-| **Console methods**                                 | ✅           | ❌                                                              | ✅                                                                  | ❌                                                |
-| [**Strict typing**](#strict-typing)                 | ✅           | ❌                                                              | ❌                                                                  | ❌                                                |
-| **Tree-shakeable ESM**                              | ✅           | ✅                                                              | ✅                                                                  | ❌                                                |
-| **Zero dependencies**                               | ✅           | ✅                                                              | ❌                                                                  | ❌                                                |
+|                                         | This package | [tiny-invariant](https://github.com/alexreardon/tiny-invariant) | [ts-invariant](https://github.com/apollographql/invariant-packages) | [invariant](https://github.com/zertosh/invariant) |
+| --------------------------------------- | ------------ | --------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------- |
+| **Size (gzip)**                         | ~448 B       | ~370 B                                                          | ~1.0 kB                                                             | ~1.1 kB                                           |
+| **Zero Dependencies**                   | ✅           | ✅                                                              | ❌                                                                  | ❌                                                |
+| **Tree-shakeable ESM**                  | ✅           | ✅                                                              | ✅                                                                  | ❌                                                |
+| [**Type narrowing**](#how-it-works)     | ✅           | ✅                                                              | ✅                                                                  | ❌                                                |
+| [**Strict typing**](#strict-typing)     | ✅           | ❌                                                              | ❌                                                                  | ❌                                                |
+| [**Lazy messages**](#lazy-messages)     | ✅           | ❌                                                              | ❌                                                                  | ❌                                                |
+| [**Console methods**](#console-methods) | ✅           | ❌                                                              | ✅                                                                  | ❌                                                |
+| [**Invariant factory**](#custom-errors) | ✅           | ❌                                                              | ❌                                                                  | ❌                                                |
 
 ## Install
 
@@ -57,7 +57,7 @@ Pass a function to defer message construction and avoid expensive message comput
 invariant(value, getExpensiveMessage)
 ```
 
-### Custom error classes
+### Custom errors
 
 If you need to throw domain-specific errors — a `NotFoundError`, a `ValidationError`, or anything else — you're left wrapping calls or rolling your own helper. This package provides `createInvariant` to build an invariant function that throws any error class you give it, with the same assertion narrowing and lazy message support.
 
