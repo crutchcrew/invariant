@@ -28,6 +28,10 @@
 		".": {
 			"types": "./dist/index.d.ts",
 			"import": "./dist/index.js"
+		},
+		"./strict": {
+			"types": "./dist/strict.d.ts",
+			"import": "./dist/index.js"
 		}
 	},
 	"scripts": {
