@@ -1,7 +1,7 @@
 {
 	"name": "@crutchcrew/invariant",
-	"version": "0.1.0",
-	"description": "TypeScript invariant with custom error support",
+	"version": "0.1.1",
+	"description": "Yet another tiny invariant package for your TypeScript project",
 	"keywords": [
 		"assert",
 		"error",
