@@ -1,6 +1,7 @@
 # invariant 🔬🔨
 
 <!-- TODO: switch to dynamic badges after first npm publish and gh-pages deploy -->
+
 ![npm version](https://img.shields.io/badge/npm-0.1.0-blue)
 ![coverage](https://img.shields.io/badge/coverage-92%25-brightgreen)
 ![gzip size](https://img.shields.io/badge/gzip-448B-blue)
@@ -22,15 +23,15 @@ invariant(user, "User not found")
 
 ## Why this package
 
-|  | `@crutchcrew/invariant` | [tiny-invariant](https://github.com/alexreardon/tiny-invariant) | [ts-invariant](https://github.com/apollographql/invariant-packages) | [invariant](https://github.com/zertosh/invariant) |
-| --- | --- | --- | --- | --- |
-| **Size (gzip)**                                     | ~448 B                  | ~370 B                                                            | ~1.0 kB                                                               | ~1.1 kB                                             |
-| **Type narrowing**                                  | ✅                      | ✅                                                                | ✅                                                                    | ❌                                                  |
-| **Lazy messages**                                   | ✅                      | ❌                                                                | ❌                                                                    | ❌                                                  |
-| [**Invariant factory**](#createinvarianterrorclass) | ✅                      | ❌                                                                | ❌                                                                    | ❌                                                  |
-| **Console methods**                                 | ✅                      | ❌                                                                | ✅                                                                    | ❌                                                  |
-| **Tree-shakeable ESM**                              | ✅                      | ✅                                                                | ✅                                                                    | ❌                                                  |
-| **Zero dependencies**                               | ✅                      | ✅                                                                | ❌                                                                    | ❌                                                  |
+|                                                     | `@crutchcrew/invariant` | [tiny-invariant](https://github.com/alexreardon/tiny-invariant) | [ts-invariant](https://github.com/apollographql/invariant-packages) | [invariant](https://github.com/zertosh/invariant) |
+| --------------------------------------------------- | ----------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------- |
+| **Size (gzip)**                                     | ~448 B                  | ~370 B                                                          | ~1.0 kB                                                             | ~1.1 kB                                           |
+| **Type narrowing**                                  | ✅                      | ✅                                                              | ✅                                                                  | ❌                                                |
+| **Lazy messages**                                   | ✅                      | ❌                                                              | ❌                                                                  | ❌                                                |
+| [**Invariant factory**](#createinvarianterrorclass) | ✅                      | ❌                                                              | ❌                                                                  | ❌                                                |
+| **Console methods**                                 | ✅                      | ❌                                                              | ✅                                                                  | ❌                                                |
+| **Tree-shakeable ESM**                              | ✅                      | ✅                                                              | ✅                                                                  | ❌                                                |
+| **Zero dependencies**                               | ✅                      | ✅                                                              | ❌                                                                  | ❌                                                |
 
 ## Install
 
