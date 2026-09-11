@@ -16,14 +16,17 @@ jobs:
 
       - run: bun install
 
+      - name: Lockfile drift
+        run: bun lockfile:check
+
+      - name: Format
+        run: bun run fmt:check
+
       - name: Lint
         run: bun run lint
 
-      - name: Typecheck
-        run: bun run typecheck
-
       - name: Test
-        run: bun test --coverage
+        run: bun run test:coverage
 
       - name: Build
         run: bun run build

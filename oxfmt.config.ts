@@ -8,4 +8,8 @@ export default defineConfig({
 	trailingComma: "all",
 	printWidth: 100,
 	arrowParens: "always",
+	sortImports: true,
+	sortPackageJson: {
+		sortScripts: true,
+	},
 })

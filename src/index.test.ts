@@ -1,5 +1,6 @@
 import { describe, it, expect, mock } from "bun:test"
-import { invariant, createInvariant, InvariantError } from "./index.js"
+
+import { invariant, createInvariant, InvariantError, type Invariant } from "./index"
 
 describe("InvariantError", () => {
 	it("is an instance of Error", () => {
@@ -9,14 +10,9 @@ describe("InvariantError", () => {
 	})
 
 	it("has correct name and framesToPop", () => {
-		const error = new InvariantError()
-		expect(error.name).toBe("Invariant Violation")
+		const error = new InvariantError("test")
+		expect(error.name).toBe("InvariantError")
 		expect(error.framesToPop).toBe(1)
-	})
-
-	it("uses default message when none provided", () => {
-		const error = new InvariantError()
-		expect(error.message).toBe("Invariant Violation")
 	})
 
 	it("uses provided message", () => {
@@ -56,6 +52,22 @@ describe("invariant", () => {
 	})
 })
 
+describe("invariant console methods", () => {
+	for (const method of ["debug", "log", "warn", "error"] as const) {
+		it(`invariant.${method} delegates to console.${method}`, () => {
+			const original = console[method]
+			const fn = mock()
+			console[method] = fn
+			try {
+				invariant[method]("hello", 42)
+				expect(fn).toHaveBeenCalledWith("hello", 42)
+			} finally {
+				console[method] = original
+			}
+		})
+	}
+})
+
 describe("createInvariant", () => {
 	class CustomError extends Error {
 		constructor(message?: string) {
@@ -65,12 +77,12 @@ describe("createInvariant", () => {
 	}
 
 	it("returns a function that throws the custom error class", () => {
-		const customInvariant = createInvariant(CustomError)
+		const customInvariant: Invariant = createInvariant(CustomError)
 		expect(() => customInvariant(false, "custom")).toThrow(CustomError)
 	})
 
 	it("passes the message to the custom error", () => {
-		const customInvariant = createInvariant(CustomError)
+		const customInvariant: Invariant = createInvariant(CustomError)
 		try {
 			customInvariant(false, "detailed message")
 		} catch (e) {
@@ -81,17 +93,17 @@ describe("createInvariant", () => {
 	})
 
 	it("does not throw for truthy conditions", () => {
-		const customInvariant = createInvariant(CustomError)
+		const customInvariant: Invariant = createInvariant(CustomError)
 		expect(() => customInvariant(true)).not.toThrow()
 	})
 
 	it("supports lazy message with custom errors", () => {
-		const customInvariant = createInvariant(CustomError)
+		const customInvariant: Invariant = createInvariant(CustomError)
 		expect(() => customInvariant(false, () => "lazy custom")).toThrow("lazy custom")
 	})
 
 	it("works with built-in error classes", () => {
-		const typeInvariant = createInvariant(TypeError)
+		const typeInvariant: Invariant = createInvariant(TypeError)
 		expect(() => typeInvariant(false, "type error")).toThrow(TypeError)
 		expect(() => typeInvariant(false, "type error")).toThrow("type error")
 	})

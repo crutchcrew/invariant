@@ -3,8 +3,8 @@ pre-commit:
   jobs:
     - name: fmt
       glob: "*.{ts,tsx,js,jsx,json,css,md}"
-      run: bunx oxfmt -c oxfmt.config.ts --check {staged_files}
+      run: bunx oxfmt {staged_files}
 
     - name: lint
       glob: "*.{ts,tsx,js,jsx}"
-      run: bunx oxlint -c oxlint.config.ts {staged_files}
+      run: bunx oxlint --fix {staged_files}
