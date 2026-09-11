@@ -1,11 +1,9 @@
 # invariant 🔬🔨
 
-<!-- TODO: switch to dynamic badges after first npm publish and gh-pages deploy -->
-
-![npm version](https://img.shields.io/badge/npm-0.1.0-blue)
-![coverage](https://img.shields.io/badge/coverage-92%25-brightgreen)
-![gzip size](https://img.shields.io/badge/gzip-448B-blue)
-![license](https://img.shields.io/badge/license-MIT-green)
+[![npm version](https://img.shields.io/npm/v/@crutchcrew/invariant)](https://www.npmjs.com/package/@crutchcrew/invariant)
+[![coverage](https://img.shields.io/endpoint?url=https://crutchcrew.github.io/invariant/badges/coverage.json)](https://github.com/crutchcrew/invariant/actions)
+[![gzip size](https://img.shields.io/endpoint?url=https://crutchcrew.github.io/invariant/badges/size.json)](https://www.npmjs.com/package/@crutchcrew/invariant)
+[![license](https://img.shields.io/npm/l/@crutchcrew/invariant)](./LICENSE)
 
 TypeScript invariant with custom error class support — tiny as `tiny-invariant`, type-safe as `ts-invariant`, versatile as nothing else.
 
