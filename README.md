@@ -1,8 +1,13 @@
-# invariant
+# invariant 🔬🔨
 
-A tiny TypeScript invariant with custom error class support.
+![npm version](https://img.shields.io/npm/v/@crutchcrew/invariant)
+![coverage](https://img.shields.io/endpoint?url=https://crutchcrew.github.io/invariant/badges/coverage.json)
+![gzip size](https://img.shields.io/endpoint?url=https://crutchcrew.github.io/invariant/badges/size.json)
+![license](https://img.shields.io/npm/l/@crutchcrew/invariant)
 
-## What is `invariant`?
+TypeScript invariant with custom error class support — tiny as `tiny-invariant`, type-safe as `ts-invariant`, versatile as nothing else.
+
+## How it works
 
 An invariant function takes a value and throws if the value is [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy). If the value is [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), execution continues and TypeScript narrows the type.
 
@@ -16,17 +21,17 @@ invariant(user, "User not found")
 
 ## Why this package
 
-There are several invariant packages available for TypeScript:
-
-- [ts-invariant](https://github.com/apollographql/invariant-packages) — the original inspiration for this package, maintained by the Apollo team
-- [tiny-invariant](https://github.com/alexreardon/tiny-invariant) — a minimal, zero-dependency invariant by Alex Reardon
-- [invariant](https://github.com/zertosh/invariant) — a port of Facebook's invariant module
-
-All of them throw a fixed error type. If you need to throw domain-specific errors — a `NotFoundError`, a `ValidationError`, or anything else — you're left wrapping calls or rolling your own helper every time. This package provides `createInvariant` to build an invariant function that throws any error class you give it, with the same assertion narrowing and lazy message support.
+|                                                     | `@crutchcrew/invariant` | `[tiny-invariant](https://github.com/alexreardon/tiny-invariant)` | `[ts-invariant](https://github.com/apollographql/invariant-packages)` | `[invariant](https://github.com/zertosh/invariant)` |
+| --------------------------------------------------- | ----------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------- |
+| **Size (gzip)**                                     | ~448 B                  | ~370 B                                                            | ~1.0 kB                                                               | ~1.1 kB                                             |
+| **Type narrowing**                                  | ✅                      | ✅                                                                | ✅                                                                    | ❌                                                  |
+| **Lazy messages**                                   | ✅                      | ❌                                                                | ❌                                                                    | ❌                                                  |
+| [**Invariant factory**](#createinvarianterrorclass) | ✅                      | ❌                                                                | ❌                                                                    | ❌                                                  |
+| **Console methods**                                 | ✅                      | ❌                                                                | ✅                                                                    | ❌                                                  |
+| **Tree-shakeable ESM**                              | ✅                      | ✅                                                                | ✅                                                                    | ❌                                                  |
+| **Zero dependencies**                               | ✅                      | ✅                                                                | ❌                                                                    | ❌                                                  |
 
 ## Install
-
-Install using package manager of your choice
 
 ```sh
 pnpm add @crutchcrew/invariant
@@ -37,29 +42,46 @@ npm add @crutchcrew/invariant
 
 ## Usage
 
+```ts
+const container = document.getElementById("root")
+invariant(container, "Missing #root element")
+createRoot(container).render(<StrictMode><App /></StrictMode>)
+```
+
 ### Lazy messages
 
-Pass a function to defer message construction and avoid unnecessary string work on hot paths:
+Pass a function to defer message construction and avoid expensive message computation
 
 ```ts
-invariant(value, () => `Expected value, got ${typeof value}`)
+invariant(value, getExpensiveMessage)
 ```
 
 ### Custom error classes
 
+If you need to throw domain-specific errors — a `NotFoundError`, a `ValidationError`, or anything else — you're left wrapping calls or rolling your own helper. This package provides `createInvariant` to build an invariant function that throws any error class you give it, with the same assertion narrowing and lazy message support.
+
 Use `createInvariant` to throw your own error type:
 
 ```ts
+// component-invariant.ts
 import { createInvariant } from "@crutchcrew/invariant"
 
-class NotFoundError extends Error {
-	name = "NotFoundError"
+class ComponentError extends Error {
+  name = "ComponentError"
 }
 
-const assertFound = createInvariant(NotFoundError)
+export const invariant = createInvariant(ComponentError)
 
-assertFound(record, "Record not found")
-// throws NotFoundError
+// my-component.tsx
+import { invariant } from './component-invariant'
+
+export function MyComponent() {
+	const { id } = useParams()
+
+	invariant(id, "MyComponent can be rendered only on `/notes/:id` basepath`)
+
+	return <>...</>
+}
 ```
 
 ### Console methods
