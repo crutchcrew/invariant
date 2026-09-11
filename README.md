@@ -21,15 +21,16 @@ invariant(user, "User not found")
 
 ## Why this package
 
-|                                                     | This package | [tiny-invariant](https://github.com/alexreardon/tiny-invariant) | [ts-invariant](https://github.com/apollographql/invariant-packages) | [invariant](https://github.com/zertosh/invariant) |
-| --------------------------------------------------- | ------------ | --------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------- |
-| **Size (gzip)**                                     | ~448 B       | ~370 B                                                          | ~1.0 kB                                                             | ~1.1 kB                                           |
-| **Type narrowing**                                  | ✅           | ✅                                                              | ✅                                                                  | ❌                                                |
-| **Lazy messages**                                   | ✅           | ❌                                                              | ❌                                                                  | ❌                                                |
-| [**Invariant factory**](#createinvarianterrorclass) | ✅           | ❌                                                              | ❌                                                                  | ❌                                                |
-| **Console methods**                                 | ✅           | ❌                                                              | ✅                                                                  | ❌                                                |
-| **Tree-shakeable ESM**                              | ✅           | ✅                                                              | ✅                                                                  | ❌                                                |
-| **Zero dependencies**                               | ✅           | ✅                                                              | ❌                                                                  | ❌                                                |
+|                                         | This package | [tiny-invariant](https://github.com/alexreardon/tiny-invariant) | [ts-invariant](https://github.com/apollographql/invariant-packages) | [invariant](https://github.com/zertosh/invariant) |
+| --------------------------------------- | ------------ | --------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------- |
+| **Size (gzip)**                         | ~448 B       | ~370 B                                                          | ~1.0 kB                                                             | ~1.1 kB                                           |
+| **Zero Dependencies**                   | ✅           | ✅                                                              | ❌                                                                  | ❌                                                |
+| **Tree-shakeable ESM**                  | ✅           | ✅                                                              | ✅                                                                  | ❌                                                |
+| [**Type narrowing**](#how-it-works)     | ✅           | ✅                                                              | ✅                                                                  | ❌                                                |
+| [**Strict typing**](#strict-typing)     | ✅           | ❌                                                              | ❌                                                                  | ❌                                                |
+| [**Lazy messages**](#lazy-messages)     | ✅           | ❌                                                              | ❌                                                                  | ❌                                                |
+| [**Console methods**](#console-methods) | ✅           | ❌                                                              | ✅                                                                  | ❌                                                |
+| [**Invariant factory**](#custom-errors) | ✅           | ❌                                                              | ❌                                                                  | ❌                                                |
 
 ## Install
 
@@ -56,7 +57,7 @@ Pass a function to defer message construction and avoid expensive message comput
 invariant(value, getExpensiveMessage)
 ```
 
-### Custom error classes
+### Custom errors
 
 If you need to throw domain-specific errors — a `NotFoundError`, a `ValidationError`, or anything else — you're left wrapping calls or rolling your own helper. This package provides `createInvariant` to build an invariant function that throws any error class you give it, with the same assertion narrowing and lazy message support.
 
@@ -93,6 +94,19 @@ invariant.warn("Unexpected state", { detail })
 invariant.error("Something went wrong")
 ```
 
+### Strict typing
+
+The default export types `condition` as `any` so it can narrow any truthy/falsy value — objects, strings, numbers, whatever you hand it. Import from `@crutchcrew/invariant/strict` instead to require an actual `boolean`, catching accidental truthy/falsy checks at the type level, similar to [ts-tiny-invariant](https://github.com/iyegoroff/ts-tiny-invariant):
+
+```ts
+import { invariant } from "@crutchcrew/invariant/strict"
+
+invariant(user !== null, "User not found") // ✅ boolean condition
+invariant(user, "User not found") // ❌ type error: User | null is not assignable to boolean
+```
+
+It's the same runtime as the default export — just a stricter type layer — so `createInvariant` and `InvariantError` are also available from `/strict`.
+
 ## API
 
 ### `invariant(condition, message?)`
@@ -125,4 +139,4 @@ bun run check    # fmt + lint (with type-check) in parallel
 
 ## Credits
 
-The API and `InvariantError` design are based on [ts-invariant](https://github.com/apollographql/invariant-packages) by Ben Newman and the Apollo team.
+The API and `InvariantError` design are based on [ts-invariant](https://github.com/apollographql/invariant-packages) by Ben Newman and the Apollo team. The `/strict` entry point is inspired by [ts-tiny-invariant](https://github.com/iyegoroff/ts-tiny-invariant) by Igor Yegoroff.
