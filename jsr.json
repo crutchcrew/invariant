@@ -6,6 +6,7 @@
 		"./strict": "./src/strict.ts"
 	},
 	"publish": {
-		"include": ["LICENSE", "README.md", "src/**/*.ts"]
+		"include": ["LICENSE", "README.md", "src/**/*.ts"],
+		"exclude": ["src/**/*.spec.ts"]
 	}
 }
