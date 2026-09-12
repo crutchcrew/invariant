@@ -24,12 +24,17 @@ jobs:
         with:
           ref: ${{ env.TAG }}
 
-      - name: Verify tag matches package.json version
+      - name: Verify tag matches package.json and jsr.json version
         run: |
           TAG_VERSION="${TAG#v}"
           PKG_VERSION="$(node -p "require('./package.json').version")"
+          JSR_VERSION="$(node -p "require('./jsr.json').version")"
           if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
             echo "::error::Tag $TAG does not match package.json version $PKG_VERSION. Bump the version (e.g. \`npm version $TAG_VERSION\`) before tagging."
+            exit 1
+          fi
+          if [ "$TAG_VERSION" != "$JSR_VERSION" ]; then
+            echo "::error::Tag $TAG does not match jsr.json version $JSR_VERSION. Bump jsr.json's version to match before tagging."
             exit 1
           fi
 
@@ -50,6 +55,9 @@ jobs:
 
       - name: Publish to npm
         run: npm publish --provenance --access public
+
+      - name: Publish to JSR
+        run: npx jsr publish
 
       - name: Create GitHub release
         env:
