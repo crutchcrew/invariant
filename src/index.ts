@@ -1,17 +1,10 @@
-const {
-	setPrototypeOf = function (obj: any, proto: any) {
-		obj.__proto__ = proto
-		return obj
-	},
-} = Object as any
-
 export class InvariantError extends Error {
 	framesToPop = 1
 	override name = "InvariantError"
 
 	constructor(message: string) {
 		super(message)
-		setPrototypeOf(this, InvariantError.prototype)
+		Object.setPrototypeOf(this, InvariantError.prototype)
 	}
 }
 
