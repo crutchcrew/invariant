@@ -8,7 +8,7 @@ export default defineConfig({
 		perf: "warn",
 	},
 	rules: {
-		"no-console": "warn",
+		"no-console": "off",
 		"no-unused-vars": "error",
 		eqeqeq: "error",
 		"no-var": "error",
