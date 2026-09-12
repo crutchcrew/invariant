@@ -1,6 +1,6 @@
 {
 	"name": "@crutchcrew/invariant",
-	"version": "0.1.1",
+	"version": "1.0.0",
 	"description": "Yet another tiny invariant package for your TypeScript project",
 	"keywords": [
 		"assert",
