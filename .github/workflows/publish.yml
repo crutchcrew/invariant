@@ -9,6 +9,15 @@ on:
       tag:
         description: "Tag to publish (e.g. v1.2.3)"
         required: true
+      registry:
+        description: "Registry to publish to"
+        required: false
+        type: choice
+        default: both
+        options:
+          - both
+          - npm
+          - jsr
 
 permissions:
   contents: write
@@ -19,6 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TAG: ${{ inputs.tag || github.ref_name }}
+      REGISTRY: ${{ inputs.registry || 'both' }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -55,16 +65,23 @@ jobs:
 
       - name: Publish to npm
         id: publish_npm
+        if: env.REGISTRY == 'both' || env.REGISTRY == 'npm'
         continue-on-error: true
         run: npm publish --provenance --access public
 
       - name: Publish to JSR
+        if: env.REGISTRY == 'both' || env.REGISTRY == 'jsr'
         run: npx jsr publish
 
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create "$TAG" --generate-notes
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists, skipping."
+          else
+            gh release create "$TAG" --generate-notes
+          fi
 
       - name: Fail if npm publish failed
         if: steps.publish_npm.outcome == 'failure'
