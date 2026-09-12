@@ -1,9 +1,9 @@
 # invariant 🔬🔨
 
 [![npm version](https://img.shields.io/npm/v/@crutchcrew/invariant)](https://www.npmjs.com/package/@crutchcrew/invariant)
-[![provenance](https://img.shields.io/badge/provenance-verified-brightgreen)](https://www.npmjs.com/package/@crutchcrew/invariant)
-[![coverage](https://img.shields.io/endpoint?url=https://crutchcrew.github.io/invariant/badges/coverage.json)](https://github.com/crutchcrew/invariant/actions)
 [![gzip size](https://img.shields.io/endpoint?url=https://crutchcrew.github.io/invariant/badges/size.json)](https://www.npmjs.com/package/@crutchcrew/invariant)
+[![coverage](https://img.shields.io/endpoint?url=https://crutchcrew.github.io/invariant/badges/coverage.json)](https://github.com/crutchcrew/invariant/actions)
+[![provenance](https://img.shields.io/badge/provenance-verified-brightgreen)](https://www.npmjs.com/package/@crutchcrew/invariant)
 [![license](https://img.shields.io/npm/l/@crutchcrew/invariant)](./LICENSE)
 
 TypeScript invariant with custom error class support — tiny as `tiny-invariant`, type-safe as `ts-invariant`, versatile as nothing else.
@@ -17,14 +17,14 @@ import { invariant } from "@crutchcrew/invariant"
 
 const user: User | null = getUser()
 invariant(user, "User not found")
-// user is narrowed to User here
+console.log(user.name) // user is narrowed to User
 ```
 
 ## Why this package
 
 |                                         | This package | [tiny-invariant](https://github.com/alexreardon/tiny-invariant) | [ts-invariant](https://github.com/apollographql/invariant-packages) | [invariant](https://github.com/zertosh/invariant) |
 | --------------------------------------- | ------------ | --------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------- |
-| **Size (gzip)**                         | ~448 B       | ~370 B                                                          | ~1.0 kB                                                             | ~1.1 kB                                           |
+| **Size (gzip)**                         | ~406 B       | ~370 B                                                          | ~1.0 kB                                                             | ~1.1 kB                                           |
 | **Zero Dependencies**                   | ✅           | ✅                                                              | ❌                                                                  | ❌                                                |
 | **Tree-shakeable ESM**                  | ✅           | ✅                                                              | ✅                                                                  | ❌                                                |
 | [**Type narrowing**](#how-it-works)     | ✅           | ✅                                                              | ✅                                                                  | ❌                                                |
@@ -35,19 +35,31 @@ invariant(user, "User not found")
 
 ## Install
 
+Choose your fighter 🥊
+
 ```sh
 pnpm add @crutchcrew/invariant
+```
+
+```sh
 bun add @crutchcrew/invariant
+```
+
+```sh
 yarn add @crutchcrew/invariant
+```
+
+```sh
 npm add @crutchcrew/invariant
 ```
 
 ## Usage
 
 ```ts
-const container = document.getElementById("root")
-invariant(container, "Missing #root element")
-createRoot(container).render(<StrictMode><App /></StrictMode>)
+const response = await fetch("/users/1")
+invariant(response.ok, `Request failed: ${response.status}`)
+
+const user = await response.json()
 ```
 
 ### Lazy messages
@@ -65,39 +77,36 @@ If you need to throw domain-specific errors — a `NotFoundError`, a `Validation
 Use `createInvariant` to throw your own error type:
 
 ```ts
-// component-invariant.ts
 import { createInvariant } from "@crutchcrew/invariant"
 
-class ComponentError extends Error {
-  name = "ComponentError"
+class HttpError extends Error {
+	name = "HttpError"
 }
 
-export const invariant = createInvariant(ComponentError)
+const invariant = createInvariant(HttpError)
 
-// my-component.tsx
-import { invariant } from './component-invariant'
+export async function getUser(id: string) {
+	const response = await fetch(`/users/${id}`)
+	invariant(response.ok, `Request failed: ${response.status}`)
 
-export function MyComponent() {
-	const { id } = useParams()
-
-	invariant(id, "MyComponent can be rendered only on `/notes/:id` basepath`)
-
-	return <>...</>
+	return response.json()
 }
 ```
 
 ### Console methods
 
-Like `ts-invariant`, the invariant function exposes `debug`, `log`, `warn`, and `error` methods that delegate to the corresponding `console` methods:
+The invariant function exposes `debug`, `log`, `warn`, and `error` methods that delegate to the corresponding `console` methods:
 
 ```ts
+invariant.debug(`Message ${id} sent`)
+invariant.log("User", user)
 invariant.warn("Unexpected state", { detail })
 invariant.error("Something went wrong")
 ```
 
 ### Strict typing
 
-The default export types `condition` as `any` so it can narrow any truthy/falsy value — objects, strings, numbers, whatever you hand it. Import from `@crutchcrew/invariant/strict` instead to require an actual `boolean`, catching accidental truthy/falsy checks at the type level, similar to [ts-tiny-invariant](https://github.com/iyegoroff/ts-tiny-invariant):
+The default invariant allows to pass any value as a condition so it can check on any truthy/falsy value — objects, strings, numbers, whatever you hand it. Import from `@crutchcrew/invariant/strict` instead to require an actual `boolean`, catching accidental truthy/falsy checks at the type level:
 
 ```ts
 import { invariant } from "@crutchcrew/invariant/strict"
@@ -106,14 +115,17 @@ invariant(user !== null, "User not found") // ✅ boolean condition
 invariant(user, "User not found") // ❌ type error: User | null is not assignable to boolean
 ```
 
-It's the same runtime as the default export — just a stricter type layer — so `createInvariant` and `InvariantError` are also available from `/strict`.
+It's the same runtime as the regular invariant — just a stricter type layer — so `createInvariant` and `InvariantError` are also available from `/strict`.
 
 ## API
 
 ### `invariant(condition, message?)`
 
 ```ts
+// default
 (condition: any, message?: string | (() => string)) => asserts condition
+// strict
+(condition: boolean, message?: string | (() => string)) => asserts condition
 ```
 
 Throws `InvariantError` if `condition` is falsy. Narrows the type of `condition` to truthy.
