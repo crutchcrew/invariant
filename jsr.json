@@ -1,0 +1,11 @@
+{
+	"name": "@crutchcrew/invariant",
+	"version": "1.0.0",
+	"exports": {
+		".": "./src/index.ts",
+		"./strict": "./src/strict.ts"
+	},
+	"publish": {
+		"include": ["LICENSE", "README.md", "src/**/*.ts"]
+	}
+}
