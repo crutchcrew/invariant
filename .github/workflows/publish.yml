@@ -54,6 +54,8 @@ jobs:
           registry-url: https://registry.npmjs.org
 
       - name: Publish to npm
+        id: publish_npm
+        continue-on-error: true
         run: npm publish --provenance --access public
 
       - name: Publish to JSR
@@ -63,3 +65,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release create "$TAG" --generate-notes
+
+      - name: Fail if npm publish failed
+        if: steps.publish_npm.outcome == 'failure'
+        run: |
+          echo "::error::Publish to npm failed. JSR publish and the GitHub release still ran, but npm needs attention."
+          exit 1
