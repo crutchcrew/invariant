@@ -1,6 +1,7 @@
 # invariant 🔬🔨
 
 [![npm version](https://img.shields.io/npm/v/@crutchcrew/invariant)](https://www.npmjs.com/package/@crutchcrew/invariant)
+[![provenance](https://img.shields.io/badge/provenance-verified-brightgreen)](https://www.npmjs.com/package/@crutchcrew/invariant)
 [![coverage](https://img.shields.io/endpoint?url=https://crutchcrew.github.io/invariant/badges/coverage.json)](https://github.com/crutchcrew/invariant/actions)
 [![gzip size](https://img.shields.io/endpoint?url=https://crutchcrew.github.io/invariant/badges/size.json)](https://www.npmjs.com/package/@crutchcrew/invariant)
 [![license](https://img.shields.io/npm/l/@crutchcrew/invariant)](./LICENSE)
