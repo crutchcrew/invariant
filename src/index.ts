@@ -12,11 +12,11 @@ type ErrorConstructor<E extends Error = Error> = new (message: string) => E
 type ConsoleMethodName = "debug" | "log" | "warn" | "error"
 
 export interface Invariant extends Pick<Console, ConsoleMethodName> {
-	(condition: any, message?: string | (() => string)): asserts condition
+	(condition: unknown, message?: string | (() => string)): asserts condition
 }
 
 export function createInvariant<E extends Error>(ErrorClass: ErrorConstructor<E>): Invariant {
-	function invariant(condition: any, message?: string | (() => string)): asserts condition {
+	function invariant(condition: unknown, message?: string | (() => string)): asserts condition {
 		if (condition) return
 
 		const msg = typeof message === "function" ? message() : message
@@ -24,17 +24,11 @@ export function createInvariant<E extends Error>(ErrorClass: ErrorConstructor<E>
 	}
 
 	return Object.assign(invariant, {
-		debug: wrapConsoleMethod("debug"),
-		log: wrapConsoleMethod("log"),
-		warn: wrapConsoleMethod("warn"),
-		error: wrapConsoleMethod("error"),
+		debug: (...args: Parameters<Console["debug"]>) => console.debug(...args),
+		log: (...args: Parameters<Console["log"]>) => console.log(...args),
+		warn: (...args: Parameters<Console["warn"]>) => console.warn(...args),
+		error: (...args: Parameters<Console["error"]>) => console.error(...args),
 	})
-}
-
-function wrapConsoleMethod<M extends ConsoleMethodName>(name: M) {
-	return function () {
-		return console[name].apply(console, arguments as any)
-	} as (typeof console)[M]
 }
 
 export const invariant: Invariant = createInvariant(InvariantError)

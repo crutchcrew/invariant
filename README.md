@@ -24,7 +24,7 @@ console.log(user.name) // user is narrowed to User
 
 |                                         | This package | [tiny-invariant](https://github.com/alexreardon/tiny-invariant) | [ts-invariant](https://github.com/apollographql/invariant-packages) | [invariant](https://github.com/zertosh/invariant) |
 | --------------------------------------- | ------------ | --------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------- |
-| **Size (gzip)**                         | ~406 B       | ~370 B                                                          | ~1.0 kB                                                             | ~1.1 kB                                           |
+| **Size (gzip)**                         | ~364 B       | ~370 B                                                          | ~1.0 kB                                                             | ~1.1 kB                                           |
 | **Zero Dependencies**                   | ✅           | ✅                                                              | ❌                                                                  | ❌                                                |
 | **Tree-shakeable ESM**                  | ✅           | ✅                                                              | ✅                                                                  | ❌                                                |
 | [**Type narrowing**](#how-it-works)     | ✅           | ✅                                                              | ✅                                                                  | ❌                                                |
@@ -123,7 +123,7 @@ It's the same runtime as the regular invariant — just a stricter type layer �
 
 ```ts
 // default
-(condition: any, message?: string | (() => string)) => asserts condition
+(condition: unknown, message?: string | (() => string)) => asserts condition
 // strict
 (condition: boolean, message?: string | (() => string)) => asserts condition
 ```
